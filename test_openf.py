@@ -26,13 +26,18 @@ class TestOpenf(unittest.TestCase):
         openf.open_file("test.txt")
         mock_call.assert_called_with(["xdg-open", "test.txt"])
 
-    @patch('sys.platform', 'darwin')
+    @patch('sys.platform', 'linux')
     @patch('subprocess.call')
     @patch('os.path.exists', return_value=True)
-    def test_open_macos(self, mock_exists, mock_call):
+    def test_open_multiple_files(self, mock_exists, mock_call):
         import openf
-        openf.open_file("test.txt")
-        mock_call.assert_called_with(["open", "test.txt"])
+        from unittest.mock import call
+        with patch('sys.argv', ['openf', 'file1.txt', 'file2.txt']):
+            openf.main()
+            mock_call.assert_has_calls([
+                call(["xdg-open", "file1.txt"]),
+                call(["xdg-open", "file2.txt"])
+            ])
 
 if __name__ == '__main__':
     unittest.main()

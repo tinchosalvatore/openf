@@ -19,11 +19,11 @@ def open_file(file_path):
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: openf <file_path>")
+        print("Usage: openf <file_path1> [file_path2] ...")
         sys.exit(1)
     
-    file_path = sys.argv[1]
-    open_file(file_path)
+    for file_path in sys.argv[1:]:
+        open_file(file_path)
 
 if __name__ == "__main__":
     main()
